@@ -15,6 +15,15 @@ func runCommand(command string) (string, error) {
 	return string(output), err
 }
 
+func findEdition(osEdition string, licenses map[string]string) (string, bool) {
+	for key, value := range licenses {
+		if strings.Contains(strings.ToLower(osEdition), strings.ToLower(key)) {
+			return value, true
+		}
+	}
+	return "", false
+}
+
 func main() {
 	// Verificar si se está ejecutando en Windows
 	if runtime.GOOS != "windows" {
@@ -58,7 +67,7 @@ func main() {
 	}
 
 	// Buscar la licencia correspondiente
-	licenseKey, found := licenses[osEdition]
+	licenseKey, found := findEdition(osEdition, licenses)
 
 	// Mostrar la licencia
 	if found {
